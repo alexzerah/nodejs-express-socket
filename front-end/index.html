@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Socket io coté client</h1>
+    <button id="submitSocket">Submit socket</button>
+    <div id="msgs"></div>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+
+        const button = document.getElementById('submitSocket');
+        const msgs = document.getElementById('msgs');
+        let i = 0;
+        button.addEventListener('click', (e) => {
+            i++;
+            msgs.innerHTML += `<p style="color:green">${socket.id} : ${i}</p>`;
+            socket.emit("newTurn", 
+                {id: socket.id ,player: 1, turn: i, move: 5}
+            )
+        })
+        socket.on("newTurn", (msg) => {
+            msgs.innerHTML += `<p style="color:blue">${msg.id} : ${msg.turn}<p/>`;
+        });
+    </script>
+</body>
+</html>
